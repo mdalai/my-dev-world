@@ -1,0 +1,45 @@
+plugins {
+    id "org.openapi.generator" version "4.2.3"
+    id "base"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+openApiGenerate {
+    generatorName = "python"
+    inputSpec = "$rootDir/specs/petstore-v3.0.yaml".toString()
+    outputDir = "$rootDir/python-client".toString()
+    apiPackage = "org.openapi.example.api"
+    invokerPackage = "org.openapi.example.invoker"
+    modelPackage = "org.openapi.example.model"
+    configOptions = [
+            dateLibrary: "java8"
+    ]
+}
+
+task cleanCodes {
+    project.delete(files("$buildDir")){
+        //exclude '*.jar'
+    }
+    clean.dependsOn(cleanCodes)
+}
+
+task replaceHost(type: Copy) {
+    def hostUrl = "host=\"http://localhost:8080/v2\""
+    from("$rootDir/python-client/openapi_client"){
+        include "configuration.py"
+    }
+    into "$buildDir"
+    filter{ line -> line.replaceAll('host="http://petstore.swagger.io/v2"', hostUrl)}
+}
+
+task updateConfiguration(type: Copy, dependsOn: replaceHost) {
+    from("$buildDir") { include("configuration.py")}
+    into("$rootDir/python-client/openapi_client")
+}
+
+//replaceHost.dependsOn(openApiGenerate)
+
+
+
