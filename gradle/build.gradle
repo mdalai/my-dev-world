@@ -1,0 +1,40 @@
+
+def swaggerClientPythonDir = "$rootDir/python-client/"
+def virtualEnvDir = "$buildDir/venvs"
+def ArtifactoryPypi = "https://URL/artifactory/api/pypi/pypi-all/simple"
+def wheelSaveDir = "$swaggerClientPythonDir/wheelhouse"
+def virtualEnvPip = "$virtualEnvDir/Scripts/pip"
+
+task myTest {
+    doLast {
+        println(virtualEnvPip)
+    }
+}
+
+task buildVirtualEnv(type: Exec){
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', pythonInterpreterLoc, '-m', 'virtualenv', virtualEnvDir
+    } else {
+        commandLine 'python', '-m', 'virtualenv', virtualEnvDir
+    }
+}
+
+task installPythonClient(type: Exec) {
+    workingDir swaggerClientPythonDir
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', virtualEnvPip, 'install','.', '-i', ArtifactoryPypi
+    } else {
+        commandLine virtualEnvPip, 'install', '.', '-i', ArtifactoryPypi
+    }
+}
+
+installPythonClient.dependsOn(buildVirtualEnv)
+
+task downloadPythonClient(type: Exec) {
+    workingDir swaggerClientPythonDir
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', virtualEnvPip, 'download','.','-d', wheelSaveDir, '-i', ArtifactoryPypi
+    } else {
+        commandLine virtualEnvPip, 'download', '.', '-i', ArtifactoryPypi
+    }
+}
