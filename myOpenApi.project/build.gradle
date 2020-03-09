@@ -1,0 +1,38 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+def virtualEnvPython = "$rootDir/python-client/build/venv/Scripts/python"
+
+task runPyProducerTest  {
+    def testDir = "$rootDir/py-producer/test"
+    exec {
+        workingDir "$rootDir/py-producer"
+        commandLine virtualEnvPython, '-m', 'unittest', 'discover', testDir
+    }
+}
+
+// python -m unittest discover test/
+
+
+
+
+
+
+
+
+

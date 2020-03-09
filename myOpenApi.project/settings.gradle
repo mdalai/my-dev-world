@@ -1,0 +1,4 @@
+rootProject.name = 'myOpenApi.project'
+include ":server-spring",":java-client",":python-client"
+include ":py-producer"
+

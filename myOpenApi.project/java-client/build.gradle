@@ -1,0 +1,27 @@
+plugins {
+    id "org.openapi.generator" version "4.2.3"
+    id "base"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "$rootDir/specs/petstore-v3.0.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "org.openapi.example.api"
+    invokerPackage = "org.openapi.example.invoker"
+    modelPackage = "org.openapi.example.model"
+    configOptions = [
+            dateLibrary: "java8"
+    ]
+}
+
+
+task cleanCodes {
+    project.delete(files("$buildDir")){
+        //exclude '*.jar'
+    }
+    clean.dependsOn(cleanCodes)
+}

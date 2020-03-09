@@ -1,0 +1,81 @@
+plugins {
+    id "org.openapi.generator" version "4.2.3"
+    id "base"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+ext {
+    CodeGenPythonClientDir = "$rootDir/python-client/.generated"
+    pythonInterpreterLoc = "C:\\Python27\\python.exe"
+    virtualEnvDir = "$buildDir/venv"
+    //ArtifactoryPypi = "https://URL/artifactory/api/pypi/pypi-all/simple"
+    wheelSaveDir = "$rootDir/python-client/deploy/wheelhouse"
+    virtualEnvPip = "$virtualEnvDir/Scripts/pip"
+}
+
+openApiGenerate {
+    generatorName = "python"
+    inputSpec = "$rootDir/specs/petstore-v3.0.yaml".toString()
+    outputDir = "$CodeGenPythonClientDir".toString()
+    apiPackage = "org.openapi.example.api"
+    invokerPackage = "org.openapi.example.invoker"
+    modelPackage = "org.openapi.example.model"
+    configOptions = [
+            dateLibrary: "java8"
+    ]
+}
+
+
+task replaceHost(type: Copy) {
+    def hostUrl = "host=\"http://localhost:8080/v2\""
+    from("$CodeGenPythonClientDir/openapi_client"){
+        include "configuration.py"
+    }
+    into "$buildDir"
+    filter{ line -> line.replaceAll('host="http://petstore.swagger.io/v2"', hostUrl)}
+}
+
+task updateConfiguration(type: Copy, dependsOn: replaceHost) {
+    from("$buildDir") { include("configuration.py")}
+    into("$CodeGenPythonClientDir/openapi_client")
+    dependsOn(tasks.openApiGenerate)
+}
+
+
+task createVirtualEnv(type: Exec){
+    inputs.files("$rootDir/specs/petstore-v3.0.yaml")
+    outputs.dir(CodeGenPythonClientDir)
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', pythonInterpreterLoc, '-m', 'virtualenv', virtualEnvDir
+    } else {
+        commandLine 'python', '-m', 'virtualenv', virtualEnvDir
+    }
+}
+
+task installPythonClient(type: Exec) {
+    workingDir CodeGenPythonClientDir
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', virtualEnvPip, 'install','.'
+    } else {
+        commandLine virtualEnvPip, 'install', '.'
+    }
+
+    dependsOn([tasks.openApiGenerate, updateConfiguration, createVirtualEnv])
+}
+
+
+task cleanCodes {
+    project.delete(files("$buildDir")){
+        //exclude '*.jar'
+    }
+    delete "$CodeGenPythonClientDir"
+    clean.dependsOn(cleanCodes)
+}
+
+project.build.dependsOn(installPythonClient)
+
+
+
+
