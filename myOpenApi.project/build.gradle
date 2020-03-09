@@ -16,7 +16,7 @@ allprojects {
 }
 
 
-def virtualEnvPython = "$rootDir/python-client/build/venv/Scripts/python"
+def virtualEnvPython = "$rootDir/python-client/.venv/Scripts/python"
 
 task runPyProducerTest  {
     def testDir = "$rootDir/py-producer/test"

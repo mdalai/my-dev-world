@@ -9,7 +9,7 @@ version '1.0-SNAPSHOT'
 ext {
     CodeGenPythonClientDir = "$rootDir/python-client/.generated"
     pythonInterpreterLoc = "C:\\Python27\\python.exe"
-    virtualEnvDir = "$buildDir/venv"
+    virtualEnvDir = "$rootDir/python-client/.venv"
     //ArtifactoryPypi = "https://URL/artifactory/api/pypi/pypi-all/simple"
     wheelSaveDir = "$rootDir/python-client/deploy/wheelhouse"
     virtualEnvPip = "$virtualEnvDir/Scripts/pip"
@@ -72,6 +72,10 @@ task cleanCodes {
     }
     delete "$CodeGenPythonClientDir"
     clean.dependsOn(cleanCodes)
+}
+
+task cleanVirtualEnv {
+    delete("$virtualEnvDir")
 }
 
 project.build.dependsOn(installPythonClient)
