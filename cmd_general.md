@@ -1,4 +1,10 @@
 
+
+### Perl
+- use `eval` instead of `try catch`. The latter works strangely.
+- `untaint`: any data from external source is `taint` in `perl -T` taint mode. To untaint, apply regular expression. [How to use taint mode](http://www.perlmeme.org/howtos/secure_code/taint.html)
+
+
 ### ca-cert 
 
 ```bash
