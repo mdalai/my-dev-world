@@ -2,7 +2,7 @@
 
 ### Perl
 - use `eval` instead of `try catch`. The latter works strangely.
-- `untaint`: any data from external source is `taint` in `perl -T` taint mode. The var from command arg and glob is taint.  To untaint, apply regular expression. [How to use taint mode](http://www.perlmeme.org/howtos/secure_code/taint.html)
+- `untaint`: any data from external source is `taint` in `perl -T` taint mode. The var from command arg and glob is taint. Throws error `Insecure dependency...`.  To untaint, apply regular expression. [How to use taint mode](http://www.perlmeme.org/howtos/secure_code/taint.html)
 
 
 ### ca-cert 
