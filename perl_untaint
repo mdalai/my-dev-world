@@ -1,0 +1,20 @@
+#!/usr/bin/perl -T
+
+use strict;
+use warnings;
+
+# this $arg is taint
+my $arg = $ARGV[0];
+#my $f = "/home/dev/my-dev-world/$arg";
+
+# untaint dta and check result
+$arg =~ m/^([0-9a-zA-Z\._]+)$/ or die "Bad data in arg[0]";
+my $f = "/home/dev/my-dev-world/$1";
+
+open FH, ">$f" or die $!;
+print FH "Hello taint. How you work?\n";
+close FH;
+exit 0;
+
+
+print "HELLO\n";
