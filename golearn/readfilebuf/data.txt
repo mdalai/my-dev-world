@@ -1,0 +1,5 @@
+Hello,
+
+this is Go program designed for reading files.
+
+Go io reading is interesting.
