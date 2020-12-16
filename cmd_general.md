@@ -17,3 +17,22 @@
 from certifi import where
 print(where())
 ```
+
+### security
+- cksum, md5sum, sha1sum
+```bash
+cksum testfile1
+
+md5sum file1
+# gen checksum for multiple files
+md5sum file1 file2 file3 > file_sum.md5
+# verify 
+md5sum -c file_sum.md5
+
+# gen checksum for all files under a directory
+find dir/ -type f -print -exec md5sum {} > file_sum.md5 \;
+
+sha1sum file1 file2 > file.sha1
+sha1sum -c file.sha1
+
+```
