@@ -33,4 +33,12 @@ git checkout -- README.md  # reset a file to most recent commit
 git reset   # unstash after "git add ."
 git push origin local-branch:remote-branch  # push to remote branch
 
+# Remote local dev machine sync
+git init --bare bare_repos/my_repo.git   # remote machine: create a bare repo
+git clone bare_repos/my_repo.git repos/my_repo  # remote machine: clone bare repo as a workspace; commit and push in this WS.
+git clone dev@remote-machine:~/bare_repos/my_repo.git local_repos/my_repo # local machine: clone bare repo; pull,commit, push in this location.
+
 ```
+
+
+
