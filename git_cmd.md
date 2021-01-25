@@ -32,6 +32,7 @@ git checkout -- README.md  # reset a file to most recent commit
 ```git
 git reset   # unstash after "git add ."
 git push origin local-branch:remote-branch  # push to remote branch
+git branch -r   # list remote branches
 
 # Remote local dev machine sync
 git init --bare bare_repos/my_repo.git   # remote machine: create a bare repo
