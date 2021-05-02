@@ -41,5 +41,16 @@ git clone dev@remote-machine:~/bare_repos/my_repo.git local_repos/my_repo # loca
 
 ```
 
+```git
+# create ssh key
+ssh-keygen -t rsa
+# copy content of .ssh/id_rsa.pub to your github.com settings
+# set your remote URL to support SSH
+# check repo URL by following command:
+git remote show origin
+# change URL to support SSH
+git remote set-url origin git@github.com:xxx/xxxx.git
+```
+
 
 
